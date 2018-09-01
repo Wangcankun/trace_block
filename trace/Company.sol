@@ -1,6 +1,17 @@
 pragma solidity 0.4.24;
 
-contract Company {
+contract Companys {
+
+    uint c_amount; //企业认证费用
+    uint m_amount; //第三方认证费用
+    address c_account; //企业认证押金池
+    address m_account; //第三方认证押金池
+    
+    struct Aptitude{
+        bytes32 a_name; //证书名
+        uint a_type; //证书类型
+        string a_desc;
+    }
 
     //构建企业信息
     struct Company{
@@ -12,7 +23,7 @@ contract Company {
     }
 
     struct Product{
-        address p_code; //产品码 
+        uint256 p_code; //产品码 
         bytes32 p_name; //产品名称
         string p_desc; //产品描述
         uint p_amount; //产品价格
@@ -22,36 +33,146 @@ contract Company {
         address c_address; //产品生成者
     }
 
+    struct User {
+        address u_address; //用户地址
+        bytes32 u_name;//用户名
+        string u_desc; //用户信息
+        uint u_buy_count; //总购买数
+        uint u_eva_count; //总评价数
+        uint u_award; //总奖励
+        uint u_total_pay; //总支出
+    }
+
+    struct Order {
+        uint256 o_code; //订单号
+        address u_address; //用户地址
+        uint256 p_code; //产品编码
+        bytes32 o_status; //订单状态
+        string o_desc; //订单描述
+        uint o_amount; //订单金额
+    }
+
+    struct Evaluate {
+        address p_code;
+        bytes32 e_type;
+        string e_desc;
+    }
+
+    Order[] order_history;
+
+    mapping(address => User) public users;
+    mapping(uint256 => Order) public orders;
+    mapping(address => Order[]) public order_historys;
+    mapping(address => Aptitude) public Aptitudes;
+
     mapping(address => Company) public companys;
-    mapping(address => Product) public products;
+    mapping(uint256 => Product) public products;
+
+    //初始化认证费用和押金池地址
+    function Companys(){
+        c_amount = 10;
+        m_amount = 20;
+    }
+
+    //获取认证费用
+    function getAmount(uint _type) public returns(uint){
+        if(_type == 1){
+            return c_amount;
+        }else if(_type == 2){
+            return m_amount;
+        }else{
+            throw;
+        }
+    }
+
+    //上传认证信息
+    function upload( bytes32 name, uint _type, string desc ) public payable {
+
+    }
 
     //检查企业
     function checkCompany() public returns(bytes32 c_name, bool c_create){
-        if(IsNull(companys[msg.sender])){
+        if(companys[msg.sender].c_name != ""  ){
             return (c_name,true);
         }else{
             return ("",false);
         }
     }
 
+    //创建企业
+    function createCompany(bytes32 _name,string _desc) public payable {
+
+        Company memory company = Company(msg.sender,_name,_desc,false,0);
+        companys[msg.sender] = company;
+
+    }
+
     //获取上链成本
-    function getUpperPay(uint p_amount) public returns(uint) {
+    function getUpperPay(uint _amount) public returns(uint) {
+        return getAmount(_amount);
 
     }
 
     //上传产品信息
     function upload(bytes32 _name,string _desc) public payable {
-
+        uint256 code = rand();
+        Product memory product = Product(code,_name,_desc,0,true,false,address(0),msg.sender);
+        products[code] = product;
     }
 
     //根据code获取产品
-    function getProduct(address _code) public returns(bytes32 p_name,string p_desc,uint p_amount,
-                                    bool p_sale,bool p_saled,address p_address,address c_address ) {
+    function getProduct(uint32 _code) public returns(uint256 p_code, bytes32 p_name,string p_desc,uint p_amount,
+                                    bool p_sale,bool p_saled,address c_address ) {
 
-
+        return (products[_code].p_code,products[_code].p_name,products[_code].p_desc,products[_code].p_amount,products[_code].p_sale,products[_code].p_saled,products[_code].c_address);
 
     }
 
+    //创建用户
+    function createUser(bytes32 _name,string _desc) public payable {
+        User memory user = User(msg.sender,_name,_desc,0,0,0,0);
+        users[msg.sender] = user;
+    }
+
+    //生成订单
+    function createOrder(uint256 _code,string _desc) public payable returns(uint256 o_code, address u_address,address p_code,string o_desc) {
+
+        uint256 code = rand();
+        Product memory product = products[_code];
+        Order memory order = Order(code,msg.sender,product.p_code,"未支付",_desc,product.p_amount);
+        orders[code] = order;
+        order_historys[msg.sender].push(order);
+
+    }
+
+    //订单支付
+    function payForProduct(uint256 _code) public payable returns(bool){
+        
+    }
+
+    //获取订单状态
+    function getOrder(uint256 _code) public returns(uint256 o_code, address u_address,uint256 p_code,bytes32 o_status, string o_desc,uint o_amount){
+        Order memory order = orders[_code];
+        return (order.o_code,order.u_address,order.p_code,order.o_status,order.o_desc,order.o_amount);
+    } 
+
+    //返回订单历史记录
+    function getOrderHistory() public returns(string){
+        string result;
+        Order[] memory order_his = order_historys[msg.sender];
+        for(uint i = 0; i < order_his.length; i++) {
+             uint256 o_code; //订单号
+        address u_address; //用户地址
+        uint256 p_code; //产品编码
+        bytes32 o_status; //订单状态
+        string o_desc; //订单描述
+        uint o_amount; //订单金额
+
+         string += "{code" + order_his[i].o_code    
+        }
+    }
+
+    //随机数生成器
     function rand() public returns(uint256) {
         uint256 random = uint256(keccak256(block.difficulty,now));
         return  random%10;
