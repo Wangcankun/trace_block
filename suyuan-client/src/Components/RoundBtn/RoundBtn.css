@@ -1,0 +1,20 @@
+.roundBtn{
+  width: auto;
+  flex: auto;
+  height: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: space-around;
+}
+
+.roundBtn-round{
+  background-color: #3151BA;
+  border-radius: 8px;
+  border: none;
+  width: 57px;
+  height: 57px;
+}
+
+.roundBtn-title{
+}
