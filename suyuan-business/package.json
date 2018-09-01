@@ -1,0 +1,22 @@
+{
+  "name": "nervos-base",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@nervos/chain": "^0.17.18",
+    "@nervos/web3": "^0.17.41",
+    "antd": "^3.8.4",
+    "antd-mobile": "^2.2.3",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-router": "3.2.1",
+    "react-scripts": "1.1.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "deploy": "node ./src/contracts/deploy.js",
+    "eject": "react-scripts eject"
+  }
+}
