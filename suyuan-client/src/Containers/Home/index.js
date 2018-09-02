@@ -47,11 +47,13 @@ class Home extends Component {
         </WingBlank>
 
       {/* round buttons */}
+      {/*
       <div id="roundBtns">
         {this.state.roundBtns.map((val, index) => (
           <RoundBtn key={index} index={index} >{val.title}</RoundBtn>
         ))}
       </div>
+      */}
 
       {/* list */}
       <div id="goodList">

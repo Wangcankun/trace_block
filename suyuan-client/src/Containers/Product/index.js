@@ -4,6 +4,10 @@ import {List,Button, Carousel, WingBlank,Tabs, Badge, Steps } from 'antd-mobile'
 import LinkImg from '../../Components/LinkImg/'
 import "./Product.css";
 
+import nervos from '../../nervos'
+import {transaction, simpleStoreContract} from '../../simpleStore'
+
+
 const Item = List.Item;
 const Step = Steps.Step;
 
@@ -86,7 +90,30 @@ class Product extends Component {
           </div>
         </Tabs>
         <div className="bottom">
-          <Button type="primary">一键购买</Button>
+          <Button type="primary" onClick={() => {
+            nervos.appchain.getBlockNumber()
+            .then((current) => {
+              const tx = {
+              ...transaction,
+              from: window.neuron.getAccount(),
+              validUntilBlock: +current + 88,
+              }
+              simpleStoreContract.methods.upload("", "" ).send(tx, function(err, res){
+                if(res){
+                    nervos.listeners.listenToTransactionReceipt(res)
+                    .then(receipt => {
+                      if(!receipt.errorMessage) {
+                          console.log('商品上交已提交')
+                      }else {
+                          throw new Error(receipt.errorMessage)
+                      }
+                    })
+                }
+              })
+            }).catch(err => {
+              console.log(err)
+            })
+          }}>一键购买</Button>
         </div>
       </div>
     )

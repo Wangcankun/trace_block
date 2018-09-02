@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nervos/chain": "^0.17.19",
     "antd-mobile": "^2.2.3",
     "babel-plugin-import": "^1.8.0",
     "react": "^16.4.2",

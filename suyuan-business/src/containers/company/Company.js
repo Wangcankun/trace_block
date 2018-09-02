@@ -30,7 +30,7 @@ class Company extends Component {
     };
     onSubmit = () => {
         console.log(this.state)
-        
+
         var companyInfo = {
             regID: this.state.regID,
             regMoney: this.state.regMoney,
@@ -62,7 +62,7 @@ class Company extends Component {
                     if (res) {
                         nervos.listeners.listenToTransactionReceipt(res)
                             .then(receipt => {
-                                if (!receipt.errorMessage) { 
+                                if (!receipt.errorMessage) {
                                     // that.setState({ submitText: submitTexts.submitted })
                                     console.log('receipt:', receipt);
                                 } else {
@@ -98,7 +98,7 @@ class Company extends Component {
     };
     render() {
         const { name, regID, regMoney, originValue, currValue } = this.state;
-        return <div>    
+        return <div>
             {/* <h2>Hello, Company!</h2>
             <p>TODO:根据钱包地址对应公司信息，判断是否已经完成资质验证</p>
             <p>TODO:  - 未完成： 表单填写公司信息，选择想要的资质等级，确定后交易</p>
@@ -106,7 +106,7 @@ class Company extends Component {
             <NavBar
                 mode="light"
                 icon={ <Link to="/"><Icon type="left"/></Link> }
-            >企业资质认证</NavBar>            
+            >企业资质认证</NavBar>
             <List renderHeader={() => '资质信息'}>
                 <InputItem
                     clear
@@ -139,7 +139,7 @@ class Company extends Component {
                 </List>
             </List>
 
-            <WhiteSpace />            
+            <WhiteSpace />
         </div>
     }
 }
