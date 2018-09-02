@@ -88,7 +88,7 @@ contract Companys {
     }
 
     //上传认证信息
-    function upload( string name, uint _type, string desc ) public payable {
+    function uploadIdenti( string name, uint _type, string desc ) public payable {
 
     }
 
@@ -116,9 +116,9 @@ contract Companys {
     }
 
     //上传产品信息
-    function upload(string _name,string _desc) public payable {
+    function upload(string _name,uint _amount, string _desc) public payable {
         uint256 code = rand();
-        Product memory product = Product(code,_name,_desc,0,true,false,address(0),msg.sender);
+        Product memory product = Product(code,_name,_desc,_amount,true,false,address(0),msg.sender);
         products[code] = product;
     }
 
