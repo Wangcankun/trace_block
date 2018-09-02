@@ -21,7 +21,8 @@ class Company extends Component {
         regID: '440301503270924',
         regMoney: '200万美元',
         originValue: 100,
-        currValue: 100
+        currValue: 100,
+        submitText: '立即认证'
     };
     onChange = (value) => {
         this.setState({
@@ -62,43 +63,27 @@ class Company extends Component {
                     if (res) {
                         nervos.listeners.listenToTransactionReceipt(res)
                             .then(receipt => {
-                                if (!receipt.errorMessage) {
-                                    // that.setState({ submitText: submitTexts.submitted })
-                                    console.log('receipt:', receipt);
+                                if (!receipt.errorMessage) { 
+                                    that.setState({ submitText: '资质认证申请已提交' })
+                                    // console.log('receipt:', receipt);
                                 } else {
                                     throw new Error(receipt.errorMessage)
                                 }
                             })
                     } else {
-                        // that.setState({ submitText: submitTexts.normal })
+                        that.setState({ submitText: '资质认证申请提交失败' })
                         console.log('else');
                     }
                 })
             })
-            // .then(res => {
-            //     if (res.hash) {
-            //         alert('res:', res);
-            //         return nervos.listeners.listenToTransactionReceipt(res.hash)
-            //     } else {
-            //         throw new Error('No Transaction Hash Received')
-            //     }
-            // })
-            // .then(receipt => {
-            //     if (!receipt.errorMessage) {
-            //         // this.setState({ submitText: submitTexts.submitted })
-            //         alert('receipt:', receipt);
-            //     } else {
-            //         throw new Error(receipt.errorMessage)
-            //     }
-            // })
             .catch(err => {
                 // this.setState({ errorText: JSON.stringify(err) })
                 console.log('err:', err)
             })
     };
     render() {
-        const { name, regID, regMoney, originValue, currValue } = this.state;
-        return <div>
+        const { name, regID, regMoney, originValue, currValue, submitText } = this.state;
+        return <div>    
             {/* <h2>Hello, Company!</h2>
             <p>TODO:根据钱包地址对应公司信息，判断是否已经完成资质验证</p>
             <p>TODO:  - 未完成： 表单填写公司信息，选择想要的资质等级，确定后交易</p>
@@ -134,7 +119,7 @@ class Company extends Component {
                                 {i.text}
                             </RadioItem>
                         ))}
-                        <Button type="primary" onClick={() => this.onSubmit()}>立即认证</Button>
+                        <Button type="primary" onClick={() => this.onSubmit()}>{submitText}</Button>
                     </WingBlank>
                 </List>
             </List>

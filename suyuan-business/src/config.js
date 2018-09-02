@@ -1,7 +1,8 @@
 const config = {
   chain: 'http://121.196.200.225:1337',
   privateKey: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-  contractAddress: '0xC2d9858577477f87E5D4AD8e3432d6E92C5b98cb'
+  // contractAddress: '0xC2d9858577477f87E5D4AD8e3432d6E92C5b98cb'
+  contractAddress: '0x67ffD88c854c81fFFD5902a0B3c02f735477C5eA'
 }
 module.exports = config
 
