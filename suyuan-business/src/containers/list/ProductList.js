@@ -1,9 +1,10 @@
 import React, { Component }  from 'react'
-import { List, InputItem, WhiteSpace, Button, WingBlank, Grid, Radio, NavBar, Icon, ImagePicker, SegmentedControl, Card } from 'antd-mobile';
+import { NavBar, Icon, Card } from 'antd-mobile';
 import { Link } from 'react-router';
 
 import './ProductList.css';
 import nervos from '../../nervos';
+import { transaction, simpleStoreContract } from '../../simpleStore'
 
 class ProductList extends Component {
     state = {
@@ -21,6 +22,28 @@ class ProductList extends Component {
             { id: 5, name: '中草药二号', type: '药材', origin: '杭州', respMan: '黎明', price: 1000, picUrl: 'http://limin.windub.club/h6.jpg' },
         ]
     }
+
+    async componentDidMount() {
+        const count = await nervos.appchain.peerCount();
+        console.log(count)
+        // simpleStoreContract.methods
+        //   .getAmount(1)     //TODO： 替换
+        //   .call({
+        //     from: window.neuron.getAccount()
+        //   })
+        //   .then(text => {
+        //     console.log('text:', text)
+        //     var tempObj = JSON.parse(text)
+        //     console.log('tempObj:', tempObj);
+        //     // TODO: 处理
+        //     // this.setState({ data: tempObj })
+        //   })
+        //   .catch(error => {
+        //     console.log('error:', error)
+        //     this.setState({ errorText: error })
+        //   })
+      }
+
     render() {
         const { data } = this.state;
         return <div>

@@ -12,6 +12,7 @@ class Chain extends Component {
         origin: '云南',
         respMan: '小明',
         price: 100,
+        submitText: '上链',
         files: [
             { url: 'http://limin.windub.club/h' + Math.ceil(Math.random() *6) + '.jpg', id: '12345' }
         ],
@@ -26,7 +27,9 @@ class Chain extends Component {
             price: this.state.price,
             picUrl: this.state.files[0].url
         }
-        console.log('productInfo:', JSON.stringify(productInfo));
+        var that = this;
+        productInfo = JSON.stringify(productInfo);
+        console.log('productInfo:', productInfo);
         const from = window.neuron.getAccount();
         console.log(from)
         
@@ -36,34 +39,37 @@ class Chain extends Component {
                 console.log('current:', current)
                 const tx = {
                     ...transaction,
-                    from,
+                    from: window.neuron.getAccount(),
                     validUntilBlock: +current + 88,
                 }
                 console.log('tx:', tx);
                 console.log('simpleStoreContract:', simpleStoreContract);
-                return simpleStoreContract.methods.upload(this.state.name, this.state.productInfo).send(tx)
-            })
-            .then(res => {
-                if (res.hash) {
-                    console.log('res:', res);
-                    return nervos.listeners.listenToTransactionReceipt(res.hash)
-                } else {
-                    throw new Error('No Transaction Hash Received')
-                }
-            })
-            .then(receipt => {
-                if (!receipt.errorMessage) {
-                    console.log('receipt:', receipt);
-                } else {
-                    throw new Error(receipt.errorMessage)
-                }
+                // simpleStoreContract.methods.add('666', 151238103).send(tx, function(err, res) {
+                // simpleStoreContract.methods.createCompany(that.state.name, that.state.companyInfo).send(tx, function(err, res) {
+                simpleStoreContract.methods.upload(that.state.name, productInfo).send(tx, function(err, res) {
+                    if (res) {
+                        nervos.listeners.listenToTransactionReceipt(res)
+                            .then(receipt => {
+                                if (!receipt.errorMessage) { 
+                                    that.setState({ submitText: '商品上链申请已提交' })
+                                    // console.log('receipt:', receipt);
+                                } else {
+                                    throw new Error(receipt.errorMessage)
+                                }
+                            })
+                    } else {
+                        that.setState({ submitText: '商品上链申请提交失败' })
+                        console.log('else');
+                    }
+                })
             })
             .catch(err => {
-                this.setState({ errorText: JSON.stringify(err) })
+                this.setState({ submitText: '商品上链申请提交失败' })
+                console.log('err:', err);
             })
     };
     render() {
-        const { name, type, origin, respMan, price, files } = this.state;
+        const { name, type, origin, respMan, price, files, submitText } = this.state;
 
         return <div>    
             <NavBar
@@ -103,7 +109,7 @@ class Chain extends Component {
                 >责任人</InputItem>
                 <ImagePicker files={files}/>
                 <WingBlank>
-                    <Button type="primary" onClick={() => this.onSubmit()}>上链</Button>
+                    <Button type="primary" onClick={() => this.onSubmit()}>{submitText}</Button>
                 </WingBlank>
             </List>
             <WhiteSpace />  

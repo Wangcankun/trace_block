@@ -31,8 +31,8 @@ class App extends Component {
   async componentDidMount() {
     const count = await nervos.appchain.peerCount();
     console.log(count)
-    const from = nervos.eth.accounts.wallet[0] ? nervos.eth.accounts.wallet[0].address : ''
-    console.log(from)
+    // const from = nervos.eth.accounts.wallet[0] ? nervos.eth.accounts.wallet[0].address : ''
+    // console.log(from)
     // simpleStoreContract.methods
     //   .getAmount(1)
     //   .call({
@@ -53,7 +53,8 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={suyuan} className="App-logo" alt="logo" />
-          <h1 className="App-title">欢迎来到M303溯源平台</h1>
+          <h1 className="App-title">高价值商品溯源平台</h1>
+          <p>M303小分队</p>
         </header>
         <Grid data={data} columnNum={2} 
           renderItem={dataItem => (
